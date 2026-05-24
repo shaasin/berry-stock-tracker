@@ -122,7 +122,7 @@ body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans
     <label id="fbLabel"></label>
     <div class="num-ctrl">
       <button class="btn-sm" onclick="chgFB(-1)">&#8722;</button>
-      <input class="num-inp wide" id="fieldBonus" type="number" inputmode="numeric" min="0" max="100" value="0" oninput="clampFB();calc()">
+      <input class="num-inp wide" id="fieldBonus" type="number" inputmode="numeric" min="0" max="85" value="0" oninput="clampFB();calc()">
       <button class="btn-sm" onclick="chgFB(1)">&#43;</button>
     </div>
     <span style="font-size:14px;font-weight:700;color:var(--textm)">%</span>
@@ -185,7 +185,7 @@ var T={
   appSub:"\u30dd\u30b1\u30e2\u30f3\u3054\u3068\u306e\u304d\u306e\u307f\u30b9\u30c8\u30c3\u30af\u6570\u30fb\u7372\u5f97\u30a8\u30ca\u30b8\u30fc\u3092\u8a08\u7b97",
   fbTitle:"\u30d5\u30a3\u30fc\u30eb\u30c9\u30dc\u30fc\u30ca\u30b9",
   fbSub:"\u5168\u30dd\u30b1\u30e2\u30f3\u306e\u7372\u5f97\u30a8\u30ca\u30b8\u30fc\u306b\u4e57\u7b97",
-  fbLabel:"\u30d5\u30a3\u30fc\u30eb\u30c9\u30dc\u30fc\u30ca\u30b9\uff080\uff5e100%\uff09",
+  fbLabel:"\u30d5\u30a3\u30fc\u30eb\u30c9\u30dc\u30fc\u30ca\u30b9\uff080\uff5e85%\uff09",
   fbHint:"\u7372\u5f97\u30a8\u30ca\u30b8\u30fc \u00d7 (1 + \u30dc\u30fc\u30ca\u30b9% \u00f7 100)\uff08\u5c0f\u6570\u70b9\u4ee5\u4e0b\u5207\u308a\u4e0a\u3052\uff09",
   secPoke:"\u5bfe\u8c61\u30dd\u30b1\u30e2\u30f3\uff08\u6700\u59275\u5339\uff09",
   addPoke:"\uff0b \u30dd\u30b1\u30e2\u30f3\u3092\u8ffd\u52a0",
@@ -213,7 +213,7 @@ var T={
   supTimesTag:"\u9032\u3081\u308b\u56de\u6570",supCountTag:"\u767a\u52d5\u56de\u6570",
   boostTimesTag:"\u9032\u3081\u308b\u56de\u6570",boostCountTag:"\u767a\u52d5\u56de\u6570",
   kai:"\u56de",type:"\u30bf\u30a4\u30d7",
-  lv:"\u30ec\u30d9\u30eb\uff081\uff5e100\uff09",
+  lv:"\u30ec\u30d9\u30eb\uff081\uff5e65\uff09",
   berryCount:"\u304d\u306e\u307f\u306e\u6570\uff081\uff5e3\uff09",
   prob:"\u304d\u306e\u307f\u78ba\u7387\uff080\uff5e1.00\uff09",
   fav:"\u30ab\u30d3\u30b4\u30f3\u306e\u597d\u307f\u306b\u4e00\u81f4",
@@ -246,6 +246,8 @@ var TYPE_KEYS=Object.keys(TYPE_DATA);
 var SUP_TIMES_OPTS=[];for(var _i=4;_i<=12;_i++)SUP_TIMES_OPTS.push(_i);
 var BOOST_TIMES_OPTS=[];for(var _j=2;_j<=11;_j++)BOOST_TIMES_OPTS.push(_j);
 var SCHEMA_VER=2;
+var LV_MAX=65;
+var FB_MAX=85;
 
 var state={fieldBonus:0,pokes:[],supPats:[],boosts:[]};
 var nextPid=0,nextSid=0,nextBid=0;
@@ -293,9 +295,7 @@ function buildExportStr(){
 function doExport(){
   var str=buildExportStr();
   var ta=document.getElementById('bkArea');
-  ta.value='';
-  ta.value=str;
-  ta.focus();ta.select();
+  ta.value='';ta.value=str;ta.focus();ta.select();
   showMsg(T.bkExpDone,'ok');
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).catch(function(){});}
 }
@@ -305,8 +305,8 @@ function doImport(){
   try{
     var json=JSON.parse(decodeURIComponent(escape(atob(str))));
     if(json.v!==SCHEMA_VER)throw new Error('version');
-    state.fieldBonus=json.fieldBonus||0;
-    var importedPokes=(json.pokes||[]).map(function(p){var n=makePoke();n.name=p.name||'';n.type=TYPE_DATA[p.type]?p.type:TYPE_KEYS[0];n.lv=clamp(parseInt(p.lv)||1,1,100);n.berryCount=clamp(parseInt(p.berryCount)||1,1,3);n.prob=clamp(parseFloat(p.prob)||0,0,1);n.fav=!!p.fav;return n;});
+    state.fieldBonus=clamp(json.fieldBonus||0,0,FB_MAX);
+    var importedPokes=(json.pokes||[]).map(function(p){var n=makePoke();n.name=p.name||'';n.type=TYPE_DATA[p.type]?p.type:TYPE_KEYS[0];n.lv=clamp(parseInt(p.lv)||1,1,LV_MAX);n.berryCount=clamp(parseInt(p.berryCount)||1,1,3);n.prob=clamp(parseFloat(p.prob)||0,0,1);n.fav=!!p.fav;return n;});
     state.pokes=importedPokes;
     state.supPats=(json.supPats||[]).map(function(sp){var ns={id:nextSid++,times:SUP_TIMES_OPTS.indexOf(parseInt(sp.times))>=0?parseInt(sp.times):4,counts:{}};state.pokes.forEach(function(p,pi){var keys=Object.keys(sp.counts||{});var val=keys[pi]!==undefined?(sp.counts[keys[pi]]||0):0;ns.counts[p.id]=Math.max(0,parseInt(val)||0);});return ns;});
     state.boosts=(json.boosts||[]).map(function(b){var nb=makeBoost();nb.times=BOOST_TIMES_OPTS.indexOf(parseInt(b.times))>=0?parseInt(b.times):2;nb.count=Math.max(0,parseInt(b.count)||0);return nb;});
@@ -316,8 +316,8 @@ function doImport(){
 }
 function showMsg(msg,type){var el=document.getElementById('bkMsg');el.textContent=msg;el.className='bk-msg '+(type||'');clearTimeout(el._t);el._t=setTimeout(function(){el.textContent='';el.className='bk-msg';},4000);}
 
-function chgFB(d){state.fieldBonus=clamp(state.fieldBonus+d,0,100);document.getElementById('fieldBonus').value=state.fieldBonus;calc();}
-function clampFB(){var v=parseInt(document.getElementById('fieldBonus').value);state.fieldBonus=clamp(isNaN(v)?0:v,0,100);calc();}
+function chgFB(d){state.fieldBonus=clamp(state.fieldBonus+d,0,FB_MAX);document.getElementById('fieldBonus').value=state.fieldBonus;calc();}
+function clampFB(){var v=parseInt(document.getElementById('fieldBonus').value);state.fieldBonus=clamp(isNaN(v)?0:v,0,FB_MAX);calc();}
 function setPokeField(id,field,value){var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;p[field]=value;if(field==='name'){state.supPats.forEach(function(sp){var el=document.getElementById('sname_'+sp.id+'_'+id);if(el)el.textContent=dispName(p,state.pokes.indexOf(p));});}calc();}
 function chgPokeNum(id,field,d,mn,mx){var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;p[field]=clamp((p[field]||mn)+d,mn,mx);var el=document.getElementById('p_'+id+'_'+field);if(el)el.value=p[field];calc();}
 function addPoke(){if(state.pokes.length>=5)return;var np=makePoke();state.pokes.push(np);state.supPats.forEach(function(sp){sp.counts[np.id]=0;});render();calc();}
@@ -342,7 +342,7 @@ function renderPokes(){
       +'<button class="del-btn" onclick="delPoke('+p.id+')">&#215;</button></div>'
       +'<div class="poke-fields">'
       +'<div class="field-col"><div class="field-lbl">'+T.type+'</div><select class="sel-inp" id="p_'+p.id+'_type" onchange="setPokeField('+p.id+',\'type\',this.value)">'+typeOpts+'</select></div>'
-      +'<div class="field-col"><div class="field-lbl">'+T.lv+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',-1,1,100)">&#8722;</button><input class="num-inp" id="p_'+p.id+'_lv" type="number" inputmode="numeric" min="1" max="100" value="'+p.lv+'" oninput="setPokeField('+p.id+',\'lv\',clamp(parseInt(this.value)||1,1,100))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',1,1,100)">&#43;</button></div></div>'
+      +'<div class="field-col"><div class="field-lbl">'+T.lv+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',-1,1,'+LV_MAX+')">&#8722;</button><input class="num-inp" id="p_'+p.id+'_lv" type="number" inputmode="numeric" min="1" max="'+LV_MAX+'" value="'+p.lv+'" oninput="setPokeField('+p.id+',\'lv\',clamp(parseInt(this.value)||1,1,'+LV_MAX+'))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',1,1,'+LV_MAX+')">&#43;</button></div></div>'
       +'<div class="field-col"><div class="field-lbl">'+T.berryCount+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',-1,1,3)">&#8722;</button><input class="num-inp" id="p_'+p.id+'_berryCount" type="number" inputmode="numeric" min="1" max="3" value="'+p.berryCount+'" oninput="setPokeField('+p.id+',\'berryCount\',clamp(parseInt(this.value)||1,1,3))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',1,1,3)">&#43;</button></div></div>'
       +'<div class="field-col"><div class="field-lbl">'+T.prob+'</div><input class="num-inp wide" id="p_'+p.id+'_prob" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="'+p.prob.toFixed(2)+'" oninput="setPokeField('+p.id+',\'prob\',clamp(parseFloat(this.value)||0,0,1))" style="width:100%"></div>'
       +'</div>'
@@ -391,7 +391,7 @@ function calc(){
   var grandBerry=0,grandEnergy=0,chips='';var fb=state.fieldBonus/100;
   state.pokes.forEach(function(p,i){
     var ti=TYPE_DATA[p.type]||{base:28,berry:'?'};
-    var lv=clamp(p.lv,1,100),bc=clamp(p.berryCount,1,3),prob=clamp(p.prob,0,1);
+    var lv=clamp(p.lv,1,LV_MAX),bc=clamp(p.berryCount,1,3),prob=clamp(p.prob,0,1);
     var epb=calcEpb(ti.base,lv);
     var supOts=0;state.supPats.forEach(function(sp){supOts+=sp.times*(sp.counts[p.id]||0);});
     var totalOts=supOts+boostOts;
