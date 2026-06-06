@@ -1,4 +1,4 @@
-#Berry Stock Tracker
+# Berry Stock Tracker
 
 ポケモンスリープのきのみ在庫管理用の非公式ファンツールです。
 
