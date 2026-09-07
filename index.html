@@ -8,6 +8,7 @@
   --pk50:#FCE4EC;--pk400:#F06292;--pk600:#880E4F;
   --or50:#FFF3E0;--or600:#E65100;
   --pu50:#F3E5F5;--pu400:#AB47BC;--pu600:#6A1B9A;
+  --yw50:#FFFDE7;--yw600:#F57F17;
   --text:#2E3A2F;--textm:#5A6B5B;--textl:#8A9B8B;
   --touch:44px;
 }
@@ -44,11 +45,14 @@ body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans
 .num-inp:focus{border-color:var(--g400)}
 .sel-inp{height:var(--touch);border:1.5px solid rgba(76,175,80,0.18);border-radius:8px;padding:0 6px;font-family:inherit;font-size:12px;font-weight:700;color:var(--text);background:#FFFFFF;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238A9B8B'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
 .sel-inp:focus{border-color:var(--b400)}
-.poke-fav-row{display:flex;align-items:center;gap:8px;min-height:var(--touch)}
-.fav-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
-.fav-toggle input[type=checkbox]{width:20px;height:20px;cursor:pointer;accent-color:var(--pk400);flex-shrink:0}
-.fav-label{font-size:13px;font-weight:700;color:var(--textm)}
-.fav-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:#FCE4EC;color:var(--pk600)}
+/* チェックボックス行 */
+.poke-checks{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.check-row{display:flex;align-items:center;gap:8px;min-height:36px}
+.check-row input[type=checkbox]{width:20px;height:20px;cursor:pointer;flex-shrink:0;-webkit-appearance:auto}
+.check-label{font-size:13px;font-weight:700;color:var(--textm);cursor:pointer}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:4px}
+.badge-pk{background:#FCE4EC;color:var(--pk600)}
+.badge-yw{background:#FFFDE7;color:var(--yw600)}
 .add-btn{width:100%;padding:12px;border:1.5px dashed var(--g200);border-radius:12px;background:none;font-family:inherit;font-size:14px;font-weight:700;color:var(--g400);cursor:pointer;min-height:var(--touch);-webkit-appearance:none}
 .add-btn:active{background:#E8F5E9}
 .add-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -92,7 +96,9 @@ body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans
 .prc-energy{font-size:13px;font-weight:700;color:var(--or600)}
 .prc-meta{font-size:10px;color:var(--textl);margin-top:2px;line-height:1.5}
 .prc-bd{font-size:10px;color:var(--textl);margin-top:2px;line-height:1.5}
-.fav-chip{font-size:10px;font-weight:700;color:var(--pk600);background:#FCE4EC;border-radius:8px;padding:2px 6px;display:inline-block;margin-top:3px}
+.prc-chip{font-size:9px;font-weight:700;border-radius:8px;padding:2px 5px;display:inline-block;margin-top:2px}
+.prc-chip-pk{background:#FCE4EC;color:var(--pk600)}
+.prc-chip-yw{background:#FFFDE7;color:var(--yw600)}
 .reset-btn{display:block;margin:14px auto 0;background:none;border:1.5px solid rgba(76,175,80,0.18);border-radius:20px;padding:8px 22px;font-family:inherit;font-size:13px;color:var(--textl);cursor:pointer;font-weight:700;min-height:var(--touch);-webkit-appearance:none}
 .reset-btn:active{border-color:var(--pk400);color:var(--pk600);background:#FCE4EC}
 .empty-hint{font-size:13px;color:var(--textl);text-align:center;padding:8px 0}
@@ -216,9 +222,13 @@ var T={
   berryCount:"\u304d\u306e\u307f\u306e\u6570\uff081\uff5e3\uff09",
   prob:"\u304d\u306e\u307f\u78ba\u7387\uff080\uff5e1.00\uff09",
   fav:"\u30ab\u30d3\u30b4\u30f3\u306e\u597d\u307f\u306b\u4e00\u81f4",
-  favBadge:"\u30a8\u30ca\u30b8\u30fc\u00d72",favChip:"\u597d\u307f\u4e00\u81f4",
+  favBadge:"\u00d72",
+  exBonus:"EX\u30dc\u30fc\u30ca\u30b9\u304d\u306e\u307f2.4\u500d",
+  exBonusBadge:"\u00d72.4",
+  chipFav:"\u597d\u307f\u00d72",
+  chipEx:"EX\u00d72.4",
   sapo:"\u30b5\u30dd",boost:"\u30d6\u30fc\u30b9\u30c8",
-  ko:"\u500b",en:"en",x2:"\u00d72",
+  ko:"\u500b",en:"en",
   defaultNames:["\u30d4\u30ab\u30c1\u30e5\u30a6","\u30ab\u30d3\u30b4\u30f3","\u30d2\u30c8\u30ab\u30b2","\u30d5\u30b7\u30ae\u30c0\u30cd","\u30bc\u30cb\u30ac\u30e1"]
 };
 
@@ -244,20 +254,24 @@ TYPE_DATA["\u30c9\u30e9\u30b4\u30f3"]={base:35,berry:"\u30e4\u30c1\u30a7\u306e\u
 var TYPE_KEYS=Object.keys(TYPE_DATA);
 var SUP_TIMES_OPTS=[];for(var _i=1;_i<=12;_i++)SUP_TIMES_OPTS.push(_i);
 var BOOST_TIMES_OPTS=[];for(var _j=2;_j<=11;_j++)BOOST_TIMES_OPTS.push(_j);
-var SCHEMA_VER=2;
+var SCHEMA_VER=3;
 var LV_MAX=70;
 var FB_MAX=85;
 
+// p.fav: 好みに一致 (×2), p.ex: EXボーナス (好み×2 + EX×1.2 = ×2.4)
 var state={fieldBonus:0,pokes:[],supPats:[],boosts:[]};
 var nextPid=0,nextSid=0,nextBid=0;
 
-function makePoke(){return{id:nextPid++,name:'',type:TYPE_KEYS[0],lv:1,berryCount:1,prob:1.00,fav:false};}
+function makePoke(){return{id:nextPid++,name:'',type:TYPE_KEYS[0],lv:1,berryCount:1,prob:1.00,fav:false,ex:false};}
 function makeSupPat(){var counts={};state.pokes.forEach(function(p){counts[p.id]=0;});return{id:nextSid++,times:1,counts:counts};}
 function makeBoost(){return{id:nextBid++,times:2,count:0};}
 function calcEpb(base,lv){return Math.round(Math.max(base+(lv-1),base*Math.pow(1.025,lv-1)));}
 function r1(v){return Math.round(v*10)/10;}
 function clamp(v,mn,mx){return Math.min(mx,Math.max(mn,v));}
 function dispName(p,i){return p.name.trim()||T.defaultNames[i]||("\u30dd\u30b1\u30e2\u30f3"+(i+1));}
+
+// エナジー倍率: ex=true → ×2.4、fav=true → ×2、それ以外 → ×1
+function energyMult(p){if(p.ex)return 2.4;if(p.fav)return 2;return 1;}
 
 document.getElementById('ttl').textContent="\ud83e\uded0 "+T.appTitle;
 document.getElementById('ttlsub').textContent=T.appSub;
@@ -286,7 +300,7 @@ document.getElementById('resultGrid').innerHTML='<div class="empty-hint">'+T.emp
 
 function buildExportStr(){
   var data={v:SCHEMA_VER,fieldBonus:state.fieldBonus,
-    pokes:state.pokes.map(function(p){return{name:p.name,type:p.type,lv:p.lv,berryCount:p.berryCount,prob:p.prob,fav:p.fav};}),
+    pokes:state.pokes.map(function(p){return{name:p.name,type:p.type,lv:p.lv,berryCount:p.berryCount,prob:p.prob,fav:p.fav,ex:p.ex};}),
     supPats:state.supPats.map(function(sp){var c={};state.pokes.forEach(function(p){c[String(p.id)]=sp.counts[p.id]||0;});return{times:sp.times,counts:c};}),
     boosts:state.boosts.map(function(b){return{times:b.times,count:b.count};})};
   return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
@@ -303,9 +317,10 @@ function doImport(){
   if(!str){showMsg(T.bkErrEmpty,'err');return;}
   try{
     var json=JSON.parse(decodeURIComponent(escape(atob(str))));
-    if(json.v!==SCHEMA_VER)throw new Error('version');
+    // v2とv3の両方に対応
+    if(json.v!==SCHEMA_VER&&json.v!==2)throw new Error('version');
     state.fieldBonus=clamp(json.fieldBonus||0,0,FB_MAX);
-    var importedPokes=(json.pokes||[]).map(function(p){var n=makePoke();n.name=p.name||'';n.type=TYPE_DATA[p.type]?p.type:TYPE_KEYS[0];n.lv=clamp(parseInt(p.lv)||1,1,LV_MAX);n.berryCount=clamp(parseInt(p.berryCount)||1,1,3);n.prob=clamp(parseFloat(p.prob)||0,0,1);n.fav=!!p.fav;return n;});
+    var importedPokes=(json.pokes||[]).map(function(p){var n=makePoke();n.name=p.name||'';n.type=TYPE_DATA[p.type]?p.type:TYPE_KEYS[0];n.lv=clamp(parseInt(p.lv)||1,1,LV_MAX);n.berryCount=clamp(parseInt(p.berryCount)||1,1,3);n.prob=clamp(parseFloat(p.prob)||0,0,1);n.fav=!!p.fav;n.ex=!!p.ex;if(n.ex)n.fav=true;return n;});
     state.pokes=importedPokes;
     state.supPats=(json.supPats||[]).map(function(sp){var t=parseInt(sp.times);var validT=SUP_TIMES_OPTS.indexOf(t)>=0?t:1;var ns={id:nextSid++,times:validT,counts:{}};state.pokes.forEach(function(p,pi){var keys=Object.keys(sp.counts||{});var val=keys[pi]!==undefined?(sp.counts[keys[pi]]||0):0;ns.counts[p.id]=Math.max(0,parseInt(val)||0);});return ns;});
     state.boosts=(json.boosts||[]).map(function(b){var nb=makeBoost();nb.times=BOOST_TIMES_OPTS.indexOf(parseInt(b.times))>=0?parseInt(b.times):2;nb.count=Math.max(0,parseInt(b.count)||0);return nb;});
@@ -317,7 +332,36 @@ function showMsg(msg,type){var el=document.getElementById('bkMsg');el.textConten
 
 function chgFB(d){state.fieldBonus=clamp(state.fieldBonus+d,0,FB_MAX);document.getElementById('fieldBonus').value=state.fieldBonus;calc();}
 function clampFB(){var v=parseInt(document.getElementById('fieldBonus').value);state.fieldBonus=clamp(isNaN(v)?0:v,0,FB_MAX);calc();}
-function setPokeField(id,field,value){var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;p[field]=value;if(field==='name'){state.supPats.forEach(function(sp){var el=document.getElementById('sname_'+sp.id+'_'+id);if(el)el.textContent=dispName(p,state.pokes.indexOf(p));});}calc();}
+
+function setPokeField(id,field,value){
+  var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;
+  p[field]=value;
+  // EXボーナスON → 好みも強制ON
+  if(field==='ex'&&value===true){
+    p.fav=true;
+    var favEl=document.getElementById('p_'+id+'_fav');
+    if(favEl)favEl.checked=true;
+  }
+  // 好みをOFFにしたらEXも強制OFF
+  if(field==='fav'&&value===false){
+    p.ex=false;
+    var exEl=document.getElementById('p_'+id+'_ex');
+    if(exEl)exEl.checked=false;
+  }
+  if(field==='name'){state.supPats.forEach(function(sp){var el=document.getElementById('sname_'+sp.id+'_'+id);if(el)el.textContent=dispName(p,state.pokes.indexOf(p));});}
+  // チェック状態のバッジ再描画（軽量）
+  updateBadges(id);
+  calc();
+}
+
+function updateBadges(id){
+  var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;
+  var favBadge=document.getElementById('badge_fav_'+id);
+  var exBadge=document.getElementById('badge_ex_'+id);
+  if(favBadge)favBadge.style.display=p.fav&&!p.ex?'inline':'none';
+  if(exBadge)exBadge.style.display=p.ex?'inline':'none';
+}
+
 function chgPokeNum(id,field,d,mn,mx){var p=state.pokes.find(function(p){return p.id===id;});if(!p)return;p[field]=clamp((p[field]||mn)+d,mn,mx);var el=document.getElementById('p_'+id+'_'+field);if(el)el.value=p[field];calc();}
 function addPoke(){if(state.pokes.length>=5)return;var np=makePoke();state.pokes.push(np);state.supPats.forEach(function(sp){sp.counts[np.id]=0;});render();calc();}
 function delPoke(id){state.pokes=state.pokes.filter(function(p){return p.id!==id;});state.supPats.forEach(function(sp){delete sp.counts[id];});render();calc();}
@@ -336,6 +380,8 @@ function renderPokes(){
   var html='';
   state.pokes.forEach(function(p,i){
     var typeOpts='';TYPE_KEYS.forEach(function(t){typeOpts+='<option value="'+t+'"'+(t===p.type?' selected':'')+'>'+t+'</option>';});
+    var showFavBadge=p.fav&&!p.ex;
+    var showExBadge=p.ex;
     html+='<div class="poke-card"><div class="poke-top"><div class="poke-num">'+(i+1)+'</div>'
       +'<input class="poke-name-inp" id="p_'+p.id+'_name" type="text" inputmode="text" placeholder="'+(T.defaultNames[i]||'')+'" value="'+p.name+'" maxlength="12" oninput="setPokeField('+p.id+',\'name\',this.value)">'
       +'<button class="del-btn" onclick="delPoke('+p.id+')">&#215;</button></div>'
@@ -345,7 +391,20 @@ function renderPokes(){
       +'<div class="field-col"><div class="field-lbl">'+T.berryCount+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',-1,1,3)">&#8722;</button><input class="num-inp" id="p_'+p.id+'_berryCount" type="number" inputmode="numeric" min="1" max="3" value="'+p.berryCount+'" oninput="setPokeField('+p.id+',\'berryCount\',clamp(parseInt(this.value)||1,1,3))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',1,1,3)">&#43;</button></div></div>'
       +'<div class="field-col"><div class="field-lbl">'+T.prob+'</div><input class="num-inp wide" id="p_'+p.id+'_prob" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="'+p.prob.toFixed(2)+'" oninput="setPokeField('+p.id+',\'prob\',clamp(parseFloat(this.value)||0,0,1))" style="width:100%"></div>'
       +'</div>'
-      +'<div class="poke-fav-row"><label class="fav-toggle"><input type="checkbox" id="p_'+p.id+'_fav" '+(p.fav?'checked':'')+' onchange="setPokeField('+p.id+',\'fav\',this.checked)"><span class="fav-label">'+T.fav+'</span></label>'+(p.fav?'<span class="fav-badge">'+T.favBadge+'</span>':'')+'</div></div>';
+      +'<div class="poke-checks">'
+      // 好みチェック
+      +'<div class="check-row">'
+      +'<input type="checkbox" id="p_'+p.id+'_fav" '+(p.fav?'checked':'')+' onchange="setPokeField('+p.id+',\'fav\',this.checked)">'
+      +'<label class="check-label" for="p_'+p.id+'_fav">'+T.fav+'</label>'
+      +'<span class="badge badge-pk" id="badge_fav_'+p.id+'" style="display:'+(showFavBadge?'inline':'none')+'">'+T.favBadge+'</span>'
+      +'</div>'
+      // EXボーナスチェック
+      +'<div class="check-row">'
+      +'<input type="checkbox" id="p_'+p.id+'_ex" '+(p.ex?'checked':'')+' onchange="setPokeField('+p.id+',\'ex\',this.checked)">'
+      +'<label class="check-label" for="p_'+p.id+'_ex">'+T.exBonus+'</label>'
+      +'<span class="badge badge-yw" id="badge_ex_'+p.id+'" style="display:'+(showExBadge?'inline':'none')+'">'+T.exBonusBadge+'</span>'
+      +'</div>'
+      +'</div></div>';
   });
   document.getElementById('pokeList').innerHTML=html;
   document.getElementById('addPokeBtn').disabled=state.pokes.length>=5;
@@ -395,13 +454,20 @@ function calc(){
     var supOts=0;state.supPats.forEach(function(sp){supOts+=sp.times*(sp.counts[p.id]||0);});
     var totalOts=supOts+boostOts;
     var berryStock=r1(totalOts*bc*prob);
-    var favMult=p.fav?2:1;
-    var energy=Math.ceil(berryStock*epb*favMult*(1+fb)*10)/10;
+    var mult=energyMult(p);
+    var energy=Math.ceil(berryStock*epb*mult*(1+fb)*10)/10;
     grandBerry+=berryStock;grandEnergy+=energy;
     var name=dispName(p,i);
     var supBerry=r1(supOts*bc*prob),boostBerry=r1(boostOts*bc*prob);
     var bd='';if(supBerry)bd+=T.sapo+' +'+supBerry.toFixed(1)+T.ko+'<br>';if(boostBerry)bd+=T.boost+' +'+boostBerry.toFixed(1)+T.ko;
-    chips+='<div class="poke-result-chip"><div class="prc-name">'+name+'</div><div class="prc-berry">'+berryStock.toFixed(1)+'<span style="font-size:10px;font-weight:600"> '+T.ko+'</span></div><div class="prc-energy">'+Math.round(energy)+' '+T.en+'</div><div class="prc-meta">'+ti.berry+' Lv.'+lv+'<br>'+epb+T.en+'/'+T.ko+(p.fav?' '+T.x2:'')+'</div>'+(bd?'<div class="prc-bd">'+bd+'</div>':'')+(p.fav?'<span class="fav-chip">'+T.favChip+'</span>':'')+'</div>';
+    var chipHtml='';
+    if(p.ex)chipHtml='<span class="prc-chip prc-chip-yw">'+T.chipEx+'</span>';
+    else if(p.fav)chipHtml='<span class="prc-chip prc-chip-pk">'+T.chipFav+'</span>';
+    chips+='<div class="poke-result-chip"><div class="prc-name">'+name+'</div>'
+      +'<div class="prc-berry">'+berryStock.toFixed(1)+'<span style="font-size:10px;font-weight:600"> '+T.ko+'</span></div>'
+      +'<div class="prc-energy">'+Math.round(energy)+' '+T.en+'</div>'
+      +'<div class="prc-meta">'+ti.berry+' Lv.'+lv+'<br>'+epb+T.en+'/'+T.ko+' \u00d7'+mult+'</div>'
+      +(bd?'<div class="prc-bd">'+bd+'</div>':'')+chipHtml+'</div>';
   });
   document.getElementById('totalBerry').textContent=r1(grandBerry).toFixed(1);
   document.getElementById('totalEnergy').textContent=Math.round(grandEnergy);
@@ -409,7 +475,7 @@ function calc(){
 }
 
 function resetAll(){
-  state.pokes.forEach(function(p){p.prob=1.00;p.lv=1;p.berryCount=1;p.fav=false;});
+  state.pokes.forEach(function(p){p.prob=1.00;p.lv=1;p.berryCount=1;p.fav=false;p.ex=false;});
   state.supPats.forEach(function(sp){state.pokes.forEach(function(p){sp.counts[p.id]=0;});});
   state.boosts.forEach(function(b){b.count=0;});
   state.fieldBonus=0;document.getElementById('fieldBonus').value=0;
