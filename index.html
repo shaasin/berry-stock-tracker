@@ -200,10 +200,10 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .num-inp{width:44px;height:var(--touch);border:1.5px solid #43A047;border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
 .num-inp.wide{width:58px}
 .num-inp:focus{border-color:#1B5E20}
-/* 発動回数（サポートS・ブースト）：入力欄24px＋小さめの＋／－（36px）で、スマホでもはみ出さない幅に */
-.num-ctrl.cnt-ctrl{gap:2px;flex-shrink:0}
-.cnt-ctrl .btn-sm{width:36px;height:36px;font-size:16px}
-.num-inp.cnt-inp{width:24px;min-width:24px;height:36px;padding:0}
+/* 発動回数（サポートS・ブースト）：入力欄は156px固定、＋／－は36px。どのブラウザでも幅が変わらないよう強めに固定 */
+.num-ctrl.cnt-ctrl{display:flex;align-items:center;gap:2px;flex:0 0 auto;width:max-content}
+.num-ctrl.cnt-ctrl .btn-sm{width:36px;height:36px;font-size:16px;flex:0 0 36px}
+.num-ctrl.cnt-ctrl > .num-inp.cnt-inp{width:156px !important;min-width:156px !important;max-width:156px !important;flex:0 0 156px !important;height:36px;padding:0}
 .sel-inp{height:var(--touch);border:1.5px solid #43A047;border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232E7D32'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
 .sel-inp option{background:#FFFFFF;color:#000000}
 .sel-inp:focus{border-color:#1B5E20}
@@ -239,17 +239,22 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .sup-pat-times-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .sup-pat-times-row label{font-size:12px;font-weight:700;color:#1B3A1F;flex:1;min-width:0}
 .sup-pat-tag{font-size:10px;font-weight:700;color:#1B5E20}
-.sup-poke-rows{display:flex;flex-direction:column;gap:6px}
-.sup-poke-row{display:flex;align-items:center;gap:8px;min-width:0}
-/* サポートのポケモン名：濃い緑がかった黒で固定（ダークモードでも見える） */
-.sup-poke-name{font-size:13px;font-weight:800;color:#1B3A1F;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sup-field{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.sup-poke-rows{display:flex;flex-direction:column;gap:8px}
+/* サポートの1行：左＝ポケモン名（残りの幅をすべて使う）、右＝発動回数の操作部（内容幅のみ）。名前が必ず表示される2列グリッド */
+.sup-poke-row{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;column-gap:8px;min-width:0}
+.sup-poke-name{display:block;font-size:13px;font-weight:800;color:#1B3A1F;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sup-field{display:flex;flex-direction:column;align-items:center;gap:3px;width:max-content}
+/* スマホなど狭い画面：名前を1段目、発動回数の操作部を2段目に積んで、名前が隠れないようにする */
+@media(max-width:480px){
+  .sup-poke-row{grid-template-columns:minmax(0,1fr);row-gap:4px}
+  .sup-field{width:100%;align-items:center}
+}
 .boost-pat{background:#E3F4FC;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;min-width:0}
 .boost-pat:last-child{margin-bottom:0}
 .bp-num{font-size:12px;font-weight:700;color:#1565C0}
 .bp-del{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid #1E88E5;background:#FFFFFF;color:#0D47A1;font-size:20px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
 .bp-del:active{background:rgba(66,165,245,.25)}
-.bp-field{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.bp-field{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;width:max-content}
 .bp-tag{font-size:10px;font-weight:700;color:#1565C0}
 .fb-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .fb-row label{font-size:13px;color:#5A6B5B;flex:1;min-width:120px}
