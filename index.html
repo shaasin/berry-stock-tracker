@@ -123,6 +123,15 @@ button,input,select,textarea,option{color-scheme:light}
   .app-title h1,.card-title,.prc-name{color:#2E3A2F !important}
   .app-title p,.field-lbl,.fb-hint,.empty-hint,.sec-label,.prc-meta,.prc-bd{color:#8A9B8B !important}
   .card-sub,.check-label,.fb-row label,.sup-pat-times-row label,.sup-poke-name,.rtotal-lbl,.rtotal-unit{color:#5A6B5B !important}
+  /* ボタン・＋－・入力欄・プルダウンの文字と枠は、ダークモードでも濃く見える色で固定 */
+  .add-btn{border-color:#43A047 !important;color:#2E7D32 !important;background-color:#FFFFFF !important}
+  .add-btn.blue{border-color:#1E88E5 !important;color:#1565C0 !important}
+  .bk-btn{border-color:#8E24AA !important;color:#4A148C !important}
+  .bk-btn.imp{border-color:#1E88E5 !important;color:#0D47A1 !important}
+  .reset-btn{border-color:#78909C !important;color:#37474F !important;background-color:#FFFFFF !important}
+  .btn-sm{border-color:#388E3C !important;color:#1B5E20 !important;background-color:#FFFFFF !important}
+  .btn-sm.blue{border-color:#1E88E5 !important;color:#0D47A1 !important}
+  .num-inp,.poke-name-inp,.sel-inp{border-color:#43A047 !important}
 }
 /* 入力欄は「白背景・黒文字」に固定（自動ダーク化・自動入力対策） */
 input:not([type=checkbox]),select,textarea{
@@ -153,8 +162,9 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .poke-card{background:#FFFFFF;border:0.5px solid rgba(76,175,80,0.28);border-radius:14px;padding:12px 14px}
 .poke-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .poke-num{width:24px;height:24px;border-radius:50%;background:#E8F5E9;color:#2E7D32;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.poke-name-inp{flex:1;min-width:0;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none}
-.poke-name-inp:focus{border-color:#4CAF50}
+/* ポケモン名の入力欄：枠を濃い緑に */
+.poke-name-inp{flex:1;min-width:0;height:var(--touch);border:1.5px solid #43A047;border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none}
+.poke-name-inp:focus{border-color:#1B5E20}
 .del-btn{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(240,98,146,.3);background:#FFFFFF;color:#F06292;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .del-btn:active{background:#FCE4EC}
 /* 狭い画面は2列 */
@@ -172,15 +182,19 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .poke-fields .num-ctrl{width:100%}
 .poke-fields .num-ctrl .num-inp{flex:1 1 auto;width:auto;min-width:0}
 .poke-fields .sel-inp,.poke-fields .prob-inp{display:block;width:100%}
-.btn-sm{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(76,175,80,0.28);background:#FFFFFF;color:#2E3A2F;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;-webkit-appearance:none;appearance:none}
+/* ＋／－ボタン：濃い緑の記号と枠（ブースト側は濃い青） */
+.btn-sm{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid #388E3C;background:#FFFFFF;color:#1B5E20;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;-webkit-appearance:none;appearance:none}
 .btn-sm:active{background:#E8F5E9}
+.btn-sm.blue{border-color:#1E88E5;color:#0D47A1}
 .btn-sm.blue:active{background:#E3F4FC}
-.num-inp{width:44px;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
+/* 数値入力欄：枠を濃い緑に */
+.num-inp{width:44px;height:var(--touch);border:1.5px solid #43A047;border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
 .num-inp.wide{width:58px}
-.num-inp:focus{border-color:#4CAF50}
-.sel-inp{height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238A9B8B'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.num-inp:focus{border-color:#1B5E20}
+/* プルダウン（タイプ・回数）：枠と矢印を濃い緑に */
+.sel-inp{height:var(--touch);border:1.5px solid #43A047;border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232E7D32'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
 .sel-inp option{background:#FFFFFF;color:#000000}
-.sel-inp:focus{border-color:#42A5F5}
+.sel-inp:focus{border-color:#1B5E20}
 .poke-checks{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .check-row{display:flex;align-items:center;gap:8px;min-height:36px}
 /* チェックボックス：チェック時は淡い緑で塗りつぶし、濃い緑のチェックマークを重ねる */
@@ -198,10 +212,11 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:4px}
 .badge-pk{background:#FCE4EC;color:#880E4F}
 .badge-yw{background:#FFFDE7;color:#F57F17}
-.add-btn{width:100%;padding:12px;border:1.5px dashed #A5D6A7;border-radius:12px;background:#FFFFFF;font-family:inherit;font-size:14px;font-weight:700;color:#4CAF50;cursor:pointer;min-height:var(--touch);-webkit-appearance:none;appearance:none}
+/* 「追加」ボタン：濃い緑（パターン追加のブースト側は濃い青）の文字と枠 */
+.add-btn{width:100%;padding:12px;border:2px dashed #43A047;border-radius:12px;background:#FFFFFF;font-family:inherit;font-size:14px;font-weight:800;color:#2E7D32;cursor:pointer;min-height:var(--touch);-webkit-appearance:none;appearance:none}
 .add-btn:active{background:#E8F5E9}
-.add-btn:disabled{opacity:.4;cursor:not-allowed}
-.add-btn.blue{border-color:#90CAF9;color:#42A5F5}
+.add-btn:disabled{opacity:.45;cursor:not-allowed}
+.add-btn.blue{border-color:#1E88E5;color:#1565C0}
 .add-btn.blue:active{background:#E3F4FC}
 .sup-pat{background:#E8F5E9;border-radius:10px;padding:10px 12px;margin-bottom:8px}
 .sup-pat:last-child{margin-bottom:0}
@@ -244,13 +259,15 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .prc-chip{font-size:9px;font-weight:700;border-radius:8px;padding:2px 5px;display:inline-block;margin-top:2px}
 .prc-chip-pk{background:#FCE4EC;color:#880E4F}
 .prc-chip-yw{background:#FFFDE7;color:#F57F17}
-.reset-btn{display:block;margin:14px auto 0;background:#FFFFFF;border:1.5px solid rgba(76,175,80,0.28);border-radius:20px;padding:8px 22px;font-family:inherit;font-size:13px;color:#8A9B8B;cursor:pointer;font-weight:700;min-height:var(--touch);-webkit-appearance:none;appearance:none}
+/* リセット：濃いグレーの文字と枠 */
+.reset-btn{display:block;margin:14px auto 0;background:#FFFFFF;border:1.5px solid #78909C;border-radius:20px;padding:8px 22px;font-family:inherit;font-size:13px;color:#37474F;cursor:pointer;font-weight:800;min-height:var(--touch);-webkit-appearance:none;appearance:none}
 .reset-btn:active{border-color:#F06292;color:#880E4F;background:#FCE4EC}
 .empty-hint{font-size:13px;color:#8A9B8B;text-align:center;padding:8px 0}
 .bk-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.bk-btn{flex:1;min-width:120px;padding:10px 8px;border-radius:10px;border:1.5px solid rgba(76,175,80,0.28);background:#F3E5F5;color:#6A1B9A;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;min-height:var(--touch);-webkit-appearance:none;appearance:none;text-align:center}
+/* エクスポート／インポート：濃い紫／濃い青の文字と枠 */
+.bk-btn{flex:1;min-width:120px;padding:10px 8px;border-radius:10px;border:1.5px solid #8E24AA;background:#F3E5F5;color:#4A148C;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;min-height:var(--touch);-webkit-appearance:none;appearance:none;text-align:center}
 .bk-btn:active{background:#E1BEE7}
-.bk-btn.imp{background:#E3F4FC;color:#1565C0;border-color:#90CAF9}
+.bk-btn.imp{background:#E3F4FC;color:#0D47A1;border-color:#1E88E5}
 .bk-btn.imp:active{background:#BBDEFB}
 .bk-textarea{width:100%;min-height:80px;border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:10px;font-family:'Courier New',monospace;font-size:11px;outline:none;resize:vertical;-webkit-appearance:none;appearance:none;word-break:break-all}
 .bk-textarea:focus{border-color:#AB47BC}
