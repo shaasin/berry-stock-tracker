@@ -123,15 +123,22 @@ body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans
 .poke-name-inp:focus{border-color:var(--g400)}
 .del-btn{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(240,98,146,.3);background:#FFFFFF;color:var(--pk400);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .del-btn:active{background:#FCE4EC}
-.poke-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-@media(min-width:580px){
-  .poke-fields{grid-template-columns:120px 156px 156px minmax(56px,1fr)}
+/* 狭い画面は2列 */
+.poke-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;align-items:start}
+/* 4列：タイプ120px、レベル163px、きのみの数156px固定。きのみ確率だけが伸縮（最小125px） */
+@media(min-width:640px){
+  .poke-fields{grid-template-columns:120px 163px 156px minmax(125px,1fr)}
 }
-.field-col{display:flex;flex-direction:column;gap:5px;min-width:0}
-.field-lbl{font-size:11px;font-weight:700;color:var(--textl);line-height:1.3}
+.field-col{min-width:0}
+.field-lbl{font-size:11px;font-weight:700;color:var(--textl);line-height:14px;height:14px}
+.poke-fields .field-lbl{white-space:nowrap}
+/* 各列を「見出し行14px + 入力行44px」の同じ行構成にし、入力行の中心線をすべての列で一致させる */
+.poke-fields .field-col{display:grid;grid-template-rows:14px 44px;row-gap:5px;align-content:start}
+.poke-fields .field-col > :nth-child(2){align-self:center;height:44px;min-height:44px;max-height:44px}
 .num-ctrl{display:flex;align-items:center;gap:4px}
 .poke-fields .num-ctrl{width:100%}
 .poke-fields .num-ctrl .num-inp{flex:1 1 auto;width:auto;min-width:0}
+.poke-fields .sel-inp,.poke-fields .prob-inp{display:block;width:100%}
 .btn-sm{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(76,175,80,0.28);background:#FFFFFF;color:var(--text);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;-webkit-appearance:none}
 .btn-sm:active{background:#E8F5E9}
 .btn-sm.blue:active{background:#E3F4FC}
@@ -391,7 +398,6 @@ document.getElementById('resUnit2').textContent=T.resUnit2;
 document.getElementById('resetBtn').textContent=T.resetBtn;
 document.getElementById('resultGrid').innerHTML='<div class="empty-hint">'+T.emptyPoke+'</div>';
 
-// ===== データのシリアライズ（エクスポート／ブラウザ保存で共通） =====
 function buildExportStr(){
   var data={v:SCHEMA_VER,fieldBonus:state.fieldBonus,
     pokes:state.pokes.map(function(p){return{name:p.name,type:p.type,lv:p.lv,berryCount:p.berryCount,prob:p.prob,fav:p.fav,ex:p.ex};}),
@@ -399,7 +405,6 @@ function buildExportStr(){
     boosts:state.boosts.map(function(b){return{times:b.times,count:b.count};})};
   return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
 }
-// 文字列からstateを復元（失敗時は例外）
 function applyDataStr(str){
   var json=JSON.parse(decodeURIComponent(escape(atob(str))));
   if(json.v!==SCHEMA_VER&&json.v!==2)throw new Error('version');
@@ -411,7 +416,6 @@ function applyDataStr(str){
   document.getElementById('fieldBonus').value=state.fieldBonus;
 }
 
-// ===== ブラウザへの保存・読み込み =====
 function saveState(){
   try{ window.localStorage.setItem(STORAGE_KEY,buildExportStr()); }catch(e){}
 }
@@ -493,7 +497,7 @@ function renderPokes(){
       +'<div class="field-col"><div class="field-lbl">'+T.type+'</div><select class="sel-inp" id="p_'+p.id+'_type" onchange="setPokeField('+p.id+',\'type\',this.value)">'+typeOpts+'</select></div>'
       +'<div class="field-col"><div class="field-lbl">'+T.lv+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',-1,1,'+LV_MAX+')">&#8722;</button><input class="num-inp" id="p_'+p.id+'_lv" type="number" inputmode="numeric" min="1" max="'+LV_MAX+'" value="'+p.lv+'" oninput="setPokeField('+p.id+',\'lv\',clamp(parseInt(this.value)||1,1,'+LV_MAX+'))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'lv\',1,1,'+LV_MAX+')">&#43;</button></div></div>'
       +'<div class="field-col"><div class="field-lbl">'+T.berryCount+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',-1,1,3)">&#8722;</button><input class="num-inp" id="p_'+p.id+'_berryCount" type="number" inputmode="numeric" min="1" max="3" value="'+p.berryCount+'" oninput="setPokeField('+p.id+',\'berryCount\',clamp(parseInt(this.value)||1,1,3))"><button class="btn-sm" onclick="chgPokeNum('+p.id+',\'berryCount\',1,1,3)">&#43;</button></div></div>'
-      +'<div class="field-col"><div class="field-lbl">'+T.prob+'</div><input class="num-inp wide" id="p_'+p.id+'_prob" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="'+p.prob.toFixed(2)+'" oninput="setPokeField('+p.id+',\'prob\',clamp(parseFloat(this.value)||0,0,1))" style="width:100%"></div>'
+      +'<div class="field-col"><div class="field-lbl">'+T.prob+'</div><input class="num-inp prob-inp" id="p_'+p.id+'_prob" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="'+p.prob.toFixed(2)+'" oninput="setPokeField('+p.id+',\'prob\',clamp(parseFloat(this.value)||0,0,1))"></div>'
       +'</div>'
       +'<div class="poke-checks">'
       +'<div class="check-row">'
@@ -574,7 +578,6 @@ function calc(){
   document.getElementById('totalBerry').textContent=r1(grandBerry).toFixed(1);
   document.getElementById('totalEnergy').textContent=Math.round(grandEnergy);
   document.getElementById('resultGrid').innerHTML=chips||'<div class="empty-hint">'+T.emptyPoke+'</div>';
-  // 入力が変わるたびにブラウザへ保存
   saveState();
 }
 
@@ -586,7 +589,6 @@ function resetAll(){
   render();calc();
 }
 
-// 起動時：保存済みの入力値があれば復元してから描画
 loadState();
 render();calc();
 </script>
