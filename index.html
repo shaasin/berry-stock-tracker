@@ -105,15 +105,22 @@
 }
 html{font-size:16px;-webkit-text-size-adjust:100%;background:#FFFFFF;color-scheme:light only}
 body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#FFFFFF;color:#2E3A2F;word-break:break-word}
-/* 入力欄の背景はブラウザ・OSの設定によらず常に白（自動入力・ダークモード対策） */
-input:not([type=checkbox]),select,textarea{background-color:#FFFFFF !important;color:#2E3A2F;color-scheme:light}
+/* 入力欄は、ブラウザ・OSがダークモードでも「白背景・黒文字」に固定（自動ダーク化・自動入力対策） */
+input:not([type=checkbox]),select,textarea{
+  background-color:#FFFFFF !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  caret-color:#000000;
+  opacity:1;
+  color-scheme:light;
+}
 input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,textarea:-webkit-autofill,select:-webkit-autofill{
   -webkit-box-shadow:0 0 0 1000px #FFFFFF inset !important;
   box-shadow:0 0 0 1000px #FFFFFF inset !important;
-  -webkit-text-fill-color:#2E3A2F !important;
-  caret-color:#2E3A2F;
+  -webkit-text-fill-color:#000000 !important;
+  caret-color:#000000;
 }
-input::placeholder,textarea::placeholder{color:#B5C2B6;opacity:1}
+input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#B5C2B6;opacity:1}
 .wrap{padding:1rem 0.75rem 2.5rem;max-width:640px;margin:0 auto;background:#FFFFFF}
 .app-title{text-align:center;margin-bottom:1.25rem}
 .app-title h1{font-size:17px;font-weight:800;color:var(--text)}
@@ -128,7 +135,7 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;opacity:1}
 .poke-card{background:#FFFFFF;border:0.5px solid rgba(76,175,80,0.28);border-radius:14px;padding:12px 14px}
 .poke-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .poke-num{width:24px;height:24px;border-radius:50%;background:#E8F5E9;color:var(--g600);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.poke-name-inp{flex:1;min-width:0;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;font-weight:700;color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
+.poke-name-inp{flex:1;min-width:0;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none}
 .poke-name-inp:focus{border-color:var(--g400)}
 .del-btn{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(240,98,146,.3);background:#FFFFFF;color:var(--pk400);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .del-btn:active{background:#FCE4EC}
@@ -150,11 +157,11 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;opacity:1}
 .btn-sm{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid rgba(76,175,80,0.28);background:#FFFFFF;color:var(--text);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;-webkit-appearance:none;appearance:none}
 .btn-sm:active{background:#E8F5E9}
 .btn-sm.blue:active{background:#E3F4FC}
-.num-inp{width:44px;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
+.num-inp{width:44px;height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
 .num-inp.wide{width:58px}
 .num-inp:focus{border-color:var(--g400)}
-.sel-inp{height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;color:var(--text);outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238A9B8B'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
-.sel-inp option{background:#FFFFFF;color:#2E3A2F}
+.sel-inp{height:var(--touch);border:1.5px solid rgba(76,175,80,0.28);border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238A9B8B'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.sel-inp option{background:#FFFFFF;color:#000000}
 .sel-inp:focus{border-color:var(--b400)}
 .poke-checks{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .check-row{display:flex;align-items:center;gap:8px;min-height:36px}
@@ -227,7 +234,7 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;opacity:1}
 .bk-btn:active{background:#E1BEE7}
 .bk-btn.imp{background:#E3F4FC;color:var(--b600);border-color:var(--b200)}
 .bk-btn.imp:active{background:#BBDEFB}
-.bk-textarea{width:100%;min-height:80px;border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:10px;font-family:'Courier New',monospace;font-size:11px;color:var(--text);outline:none;resize:vertical;-webkit-appearance:none;appearance:none;word-break:break-all}
+.bk-textarea{width:100%;min-height:80px;border:1.5px solid rgba(76,175,80,0.28);border-radius:10px;padding:10px;font-family:'Courier New',monospace;font-size:11px;outline:none;resize:vertical;-webkit-appearance:none;appearance:none;word-break:break-all}
 .bk-textarea:focus{border-color:var(--pu400)}
 .bk-msg{font-size:11px;margin-top:6px;font-weight:700;min-height:16px}
 .bk-msg.ok{color:var(--g600)}
