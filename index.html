@@ -104,7 +104,7 @@
   --touch:44px;
 }
 html{font-size:16px;-webkit-text-size-adjust:100%;background:#FFFFFF;color:#2E3A2F;color-scheme:light only}
-body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#FFFFFF;color:#2E3A2F;word-break:break-word;color-scheme:light only}
+body{font-family:'Nunito','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#FFFFFF;color:#2E3A2F;word-break:break-word;color-scheme:light only;overflow-x:hidden}
 /* ブラウザ・OSがダークモードでも、ライトモードと同じ配色に固定する（全体の色を明示指定） */
 button,input,select,textarea,option{color-scheme:light}
 @media (prefers-color-scheme: dark){
@@ -122,7 +122,12 @@ button,input,select,textarea,option{color-scheme:light}
   .card,.poke-card{background:#FFFFFF !important}
   .app-title h1,.card-title,.prc-name{color:#2E3A2F !important}
   .app-title p,.field-lbl,.fb-hint,.empty-hint,.sec-label,.prc-meta,.prc-bd{color:#8A9B8B !important}
-  .card-sub,.check-label,.fb-row label,.sup-pat-times-row label,.sup-poke-name,.rtotal-lbl,.rtotal-unit{color:#5A6B5B !important}
+  .card-sub,.check-label,.fb-row label,.rtotal-lbl,.rtotal-unit{color:#5A6B5B !important}
+  /* サポート／ブーストのパターン内の文字：ポケモン名・ラベルは濃い色で固定 */
+  .sup-poke-name{color:#1B3A1F !important;-webkit-text-fill-color:#1B3A1F !important}
+  .sup-pat-times-row label{color:#1B3A1F !important;-webkit-text-fill-color:#1B3A1F !important}
+  .sup-pat-num,.sup-pat-tag{color:#1B5E20 !important;-webkit-text-fill-color:#1B5E20 !important}
+  .bp-num,.bp-tag{color:#0D47A1 !important;-webkit-text-fill-color:#0D47A1 !important}
   /* ボタン・＋－・×・入力欄・プルダウンの文字と枠は、ダークモードでも濃く見える色で固定 */
   .add-btn{border-color:#43A047 !important;color:#2E7D32 !important;background-color:#FFFFFF !important}
   .add-btn.blue{border-color:#1E88E5 !important;color:#1565C0 !important}
@@ -156,7 +161,7 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .app-title h1{font-size:17px;font-weight:800;color:#2E3A2F}
 .app-title p{font-size:12px;color:#8A9B8B;margin-top:2px}
 .sec-label{font-size:11px;font-weight:700;color:#8A9B8B;letter-spacing:.1em;text-transform:uppercase;margin:0 0 6px 2px}
-.card{background:#FFFFFF;border:0.5px solid rgba(76,175,80,0.28);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.card{background:#FFFFFF;border:0.5px solid rgba(76,175,80,0.28);border-radius:14px;padding:12px 14px;margin-bottom:8px;min-width:0}
 .card-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .card-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .card-title{font-size:14px;font-weight:800;color:#2E3A2F}
@@ -195,8 +200,10 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .num-inp{width:44px;height:var(--touch);border:1.5px solid #43A047;border-radius:8px;text-align:center;font-family:inherit;font-size:14px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;-moz-appearance:textfield}
 .num-inp.wide{width:58px}
 .num-inp:focus{border-color:#1B5E20}
-/* 発動回数の入力欄（サポートS・ブースト）：幅を半分程度（44px → 24px）に */
-.num-inp.cnt-inp{width:24px;min-width:24px;padding:0}
+/* 発動回数（サポートS・ブースト）：入力欄24px＋小さめの＋／－（36px）で、スマホでもはみ出さない幅に */
+.num-ctrl.cnt-ctrl{gap:2px;flex-shrink:0}
+.cnt-ctrl .btn-sm{width:36px;height:36px;font-size:16px}
+.num-inp.cnt-inp{width:24px;min-width:24px;height:36px;padding:0}
 .sel-inp{height:var(--touch);border:1.5px solid #43A047;border-radius:8px;padding:0 22px 0 8px;font-family:inherit;font-size:12px;font-weight:700;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232E7D32'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
 .sel-inp option{background:#FFFFFF;color:#000000}
 .sel-inp:focus{border-color:#1B5E20}
@@ -223,20 +230,21 @@ input::placeholder,textarea::placeholder{color:#B5C2B6;-webkit-text-fill-color:#
 .add-btn:disabled{opacity:.45;cursor:not-allowed}
 .add-btn.blue{border-color:#1E88E5;color:#1565C0}
 .add-btn.blue:active{background:#E3F4FC}
-.sup-pat{background:#E8F5E9;border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.sup-pat{background:#E8F5E9;border-radius:10px;padding:10px 12px;margin-bottom:8px;min-width:0}
 .sup-pat:last-child{margin-bottom:0}
 .sup-pat-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 .sup-pat-num{font-size:12px;font-weight:700;color:#2E7D32}
 .sup-pat-del{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid #388E3C;background:#FFFFFF;color:#1B5E20;font-size:20px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto;line-height:1}
 .sup-pat-del:active{background:rgba(76,175,80,.2)}
 .sup-pat-times-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.sup-pat-times-row label{font-size:12px;color:#5A6B5B;flex:1}
-.sup-pat-tag{font-size:10px;font-weight:700;color:#2E7D32}
+.sup-pat-times-row label{font-size:12px;font-weight:700;color:#1B3A1F;flex:1;min-width:0}
+.sup-pat-tag{font-size:10px;font-weight:700;color:#1B5E20}
 .sup-poke-rows{display:flex;flex-direction:column;gap:6px}
-.sup-poke-row{display:flex;align-items:center;gap:8px}
-.sup-poke-name{font-size:12px;color:#5A6B5B;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sup-field{display:flex;flex-direction:column;align-items:center;gap:3px}
-.boost-pat{background:#E3F4FC;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sup-poke-row{display:flex;align-items:center;gap:8px;min-width:0}
+/* サポートのポケモン名：濃い緑がかった黒で固定（ダークモードでも見える） */
+.sup-poke-name{font-size:13px;font-weight:800;color:#1B3A1F;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sup-field{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.boost-pat{background:#E3F4FC;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;min-width:0}
 .boost-pat:last-child{margin-bottom:0}
 .bp-num{font-size:12px;font-weight:700;color:#1565C0}
 .bp-del{width:var(--touch);height:var(--touch);border-radius:50%;border:1.5px solid #1E88E5;background:#FFFFFF;color:#0D47A1;font-size:20px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
@@ -591,7 +599,7 @@ function renderSupPats(){
       +'<div class="sup-pat-times-row"><label>'+T.supTimesTag+'</label><select class="sel-inp" style="width:80px" onchange="setSupTimes('+sp.id+',this.value)">'+timesOpts+'</select></div>';
     if(state.pokes.length){
       html+='<div class="sup-poke-rows">';
-      state.pokes.forEach(function(p,pi){var cnt=sp.counts[p.id]||0;html+='<div class="sup-poke-row"><div class="sup-poke-name" id="sname_'+sp.id+'_'+p.id+'">'+dispName(p,pi).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</div><div class="sup-field"><div class="sup-pat-tag">'+T.supCountTag+'</div><div class="num-ctrl"><button class="btn-sm" onclick="chgSupCount('+sp.id+','+p.id+',-1)">&#8722;</button><input class="num-inp cnt-inp" id="sc_'+sp.id+'_'+p.id+'" type="number" inputmode="numeric" min="0" value="'+cnt+'" oninput="setSupCount('+sp.id+','+p.id+',this.value)"><button class="btn-sm" onclick="chgSupCount('+sp.id+','+p.id+',1)">&#43;</button></div></div></div>';});
+      state.pokes.forEach(function(p,pi){var cnt=sp.counts[p.id]||0;html+='<div class="sup-poke-row"><div class="sup-poke-name" id="sname_'+sp.id+'_'+p.id+'">'+dispName(p,pi).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</div><div class="sup-field"><div class="sup-pat-tag">'+T.supCountTag+'</div><div class="num-ctrl cnt-ctrl"><button class="btn-sm" onclick="chgSupCount('+sp.id+','+p.id+',-1)">&#8722;</button><input class="num-inp cnt-inp" id="sc_'+sp.id+'_'+p.id+'" type="number" inputmode="numeric" min="0" value="'+cnt+'" oninput="setSupCount('+sp.id+','+p.id+',this.value)"><button class="btn-sm" onclick="chgSupCount('+sp.id+','+p.id+',1)">&#43;</button></div></div></div>';});
       html+='</div>';
     }else{html+='<div class="empty-hint" style="font-size:11px">'+T.emptyPoke+'</div>';}
     html+='</div>';
@@ -608,7 +616,7 @@ function renderBoosts(){
     var opts='';BOOST_TIMES_OPTS.forEach(function(v){opts+='<option value="'+v+'"'+(v===b.times?' selected':'')+'>'+v+T.kai+'</option>';});
     html+='<div class="boost-pat"><span class="bp-num">'+T.pat+' '+(idx+1)+'</span>'
       +'<div class="bp-field"><div class="bp-tag">'+T.boostTimesTag+'</div><select class="sel-inp" id="b_'+b.id+'_times" style="width:80px" onchange="(function(el){var bb=state.boosts.find(function(x){return x.id==='+b.id+';});if(bb){bb.times=parseInt(el.value);calc();}})(this)">'+opts+'</select></div>'
-      +'<div class="bp-field" style="margin-left:8px"><div class="bp-tag">'+T.boostCountTag+'</div><div class="num-ctrl"><button class="btn-sm blue" onclick="chgBoostCount('+b.id+',-1)">&#8722;</button><input class="num-inp cnt-inp" id="b_'+b.id+'_count" type="number" inputmode="numeric" min="0" value="'+b.count+'" oninput="(function(el){var bb=state.boosts.find(function(x){return x.id==='+b.id+';});if(bb){bb.count=Math.max(0,parseInt(el.value)||0);calc();}})(this)"><button class="btn-sm blue" onclick="chgBoostCount('+b.id+',1)">&#43;</button></div></div>'
+      +'<div class="bp-field"><div class="bp-tag">'+T.boostCountTag+'</div><div class="num-ctrl cnt-ctrl"><button class="btn-sm blue" onclick="chgBoostCount('+b.id+',-1)">&#8722;</button><input class="num-inp cnt-inp" id="b_'+b.id+'_count" type="number" inputmode="numeric" min="0" value="'+b.count+'" oninput="(function(el){var bb=state.boosts.find(function(x){return x.id==='+b.id+';});if(bb){bb.count=Math.max(0,parseInt(el.value)||0);calc();}})(this)"><button class="btn-sm blue" onclick="chgBoostCount('+b.id+',1)">&#43;</button></div></div>'
       +'<button class="bp-del" onclick="delBoost('+b.id+')">&#215;</button></div>';
   });
   cont.innerHTML=html;
